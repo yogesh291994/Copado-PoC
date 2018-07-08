@@ -106,6 +106,17 @@
         <trackTrending>false</trackTrending>
     </fields>
     <fields>
+        <fullName>Opp_External_Id__c</fullName>
+        <externalId>true</externalId>
+        <label>Opp_External Id</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>OwnerId</fullName>
         <trackFeedHistory>true</trackFeedHistory>
         <trackTrending>false</trackTrending>
