@@ -30,15 +30,29 @@
                 <apex:pageBlockSectionItem >
 
                     <apex:outputPanel >
-                        <apex:outputLabel value="Repository"/>
-                        <apex:selectList value="{!selectedRepository}" size="1" id="repoSelection" >
-                            <apex:selectOptions value="{!repositories}" />
-                        </apex:selectList>
-                        <apex:outputLabel value="CommitId: " for="commitSearch"/>
-                        <apex:inputText id="commitSearch"/>
-                        <apex:outputLabel value="BranchName: " for="branchSearch"/>
-                        <apex:inputText id="branchSearch"/>
-                        <input type="button" onclick="copadoApp.search(); return false;" value="Search" class="btn" />
+                        <table>
+                            <tr>
+                                <td>
+                                    <apex:outputLabel value="Repository"/>
+                                </td>
+                                <td>
+                                    <apex:selectList value="{!selectedRepository}" size="1" id="repoSelection" >
+                                        <apex:selectOptions value="{!repositories}" />
+                                    </apex:selectList>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel value="CommitId: " for="commitSearch"/></td>
+                                <td><apex:inputText id="commitSearch"/></td>
+                            </tr>
+                            <tr>
+                                <td><apex:outputLabel value="BranchName: " for="branchSearch"/></td>
+                                <td><apex:inputText id="branchSearch"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="float:left;"><input type="button" onclick="copadoApp.search(); return false;" value="Search" class="btn" /></td>
+                            </tr>
+                        </table>
                     </apex:outputPanel>
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
@@ -187,7 +201,7 @@
                     me.doSearch(v.val(),c.val(),b.val());
                 }
             };
-        
+
             var gcl = gcl || {};
             gcl.initGrid = function(){
                 try{
@@ -208,29 +222,29 @@
                         ],
                         datatype: "array"
                     };
-                    
+
                     var cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
                         /*var v = value.split('|');
                         var obj = {repository:v[5], branch:v[1], commitId:v[2], repositoryId:v[3]};
                         console.log( 'javascript:top.window.opener.lookupPick2("'+copadoApp.formTag+'", "'+copadoApp.textBox+'_lkid", "'+copadoApp.textBox+'", "'+v[3]+'", "'+v[4]+'", false);');
                         */
-                     
+
                         return defaulthtml;
 
                     }
 
                     dataAdapter = new $copado.jqx.dataAdapter(source);
                     $grid = $copado('<div>');
-                        
+
                     $copado("#jqxgrid").html($grid);
-                    
+
                     $grid.jqxGrid({
                         width: '100%',
                         source: dataAdapter,
                         showfilterrow: true,
                         filterable: true,
                         theme: theme,
-                        editable: false, 
+                        editable: false,
                         selectionmode: 'singlerow',
                         enablebrowserselection: true,
                         pageable: true,
@@ -246,7 +260,7 @@
                           {text: 'Commit Date', columntype:'textbox', filtertype: 'textbox', filtercondition: 'contains', editable:false, datafield: 'd', width: 90, cellsformat: 'yyyy-MM-dd'},
                           {text: 'Commit Id', columntype:'textbox', filtertype: 'textbox', filtercondition: 'contains', editable:false, datafield: 'i', width: 300},
                           {text: 'Commit Message', columntype:'textbox', filtertype: 'textbox', filtercondition: 'contains', editable:false, datafield: 'm', width: 300}
-                          
+
                         ]
                     });
 
@@ -259,9 +273,9 @@
 
                         //depending of lookup mode, callback
                         if(copadoApp.mode == 'GitOrgCommit'){
-                            top.window.opener.lookupPick2(copadoApp.formTag, 
+                            top.window.opener.lookupPick2(copadoApp.formTag,
                                 decodeURIComponent(copadoApp.textBox)+'_lkid',
-                                decodeURIComponent(copadoApp.textBox), 
+                                decodeURIComponent(copadoApp.textBox),
                                 row.cid,  //commit SFDC ID
                                 row.n, // Commit Name
                                 false
