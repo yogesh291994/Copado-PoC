@@ -4601,7 +4601,6 @@ var copadoGitPromotionStep = {
                 }
                 local[event.args.rowindex] = t;
                 $grid2.jqxGrid('refresh');
-                $grid2.jqxGrid('applyfilters');
             });
         }
     },

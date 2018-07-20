@@ -821,6 +821,7 @@
                                     </thead>
                                     <tbody id="mainTableBody">
                                         <apex:repeat value="{!latestOverlay.userStories}" var="us" id="userStoryRepeat">
+                                            <!--<apex:outputPanel layout="none" rendered="{!usEnvironmentAvailabilityMap[us.userStory.id].isAvailable}"> -->
                                             <tr class="slds-hint-parent">
                                                 <td role="gridcell" class="slds-text-align_right" style="width: 3.25rem;">
                                                     <apex:inputCheckbox id="checkbox-2" value="{!us.isSelected}" onchange="calcDepUS(); return false;"/>
@@ -834,6 +835,7 @@
                                                     </td>
                                                 </apex:repeat>
                                             </tr>
+                                            <!--</apex:outputPanel>-->
                                         </apex:repeat>
                                     </tbody>
                                 </table>

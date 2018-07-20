@@ -738,7 +738,7 @@
                                         
                                         <div>
                                             <apex:outputPanel id="tableButtons" layout="block">
-                                                <apex:outputPanel layout="block" rendered="{!rebaseUserStoriesWrapper.size > 0}">
+                                                <apex:outputPanel layout="block" rendered="{!AND(rebaseUserStoriesWrapper.size > 0, OR(AND(NOT(ISNULL(rebaseProject)), rebaseProject != '--None--'),AND(NOT(ISNULL(rebaseRelease)), rebaseRelease != '--None--')))}">
                                                     <div class="slds-grid" style="padding-bottom: 15px;">
                                                         <div class="slds-col">
                                                             <!-- TODO: replace hardcoded value with this custom label Unselect_All_User_Stories} -->
@@ -803,16 +803,6 @@
                                                                         <th class="headcol">
                                                                             <apex:inputCheckbox id="usCheckbox" value="{!us.isSelected}" html-name="{!us.userStory.Id}"  html-data-chb-type="userStory" onchange="selectAllRebaseUserStories($copado(this))"/>
                                                                         </th>
-                                                                        <!--TODO: In the next release use below repeat
-                                                                        Mass_Back_Promote_FieldSet field set is not in BP so in order to
-                                                                        patch mass promotion feature following lines are commented out -->
-                                                                        <!--<apex:repeat value="{!$ObjectType.User_Story__c.FieldSets.Mass_Back_Promote_FieldSet}" var="f">
-                                                                            <th class="headcol" style="text-align: left;width: 20%;overflow-wrap: break-word;">
-                                                                                <div class="slds-truncate" title="{!us.userStory[f]}">
-                                                                                   <c:LightningReadyOutputFields SObject="{!us.userStory}" Field="{!f}" showLabel="false" dividerBottom="false" customClass="usFields" isViewLink="{!if(f=='Name',true,false)}" htmlTarget="_blank" />
-                                                                                </div>
-                                                                            </th>
-                                                                        </apex:repeat>-->
                                                                         <th class="headcol" style="text-align: left;width: 20%;overflow-wrap: break-word;">
                                                                             <div class="slds-truncate" title="User Story Reference">
                                                                                <c:LightningReadyOutputFields SObject="{!us.userStory}" Field="Name" showLabel="false" dividerBottom="false" customClass="usFields" isViewLink="true" htmlTarget="_blank" />
@@ -825,16 +815,16 @@
                                                                         </th>
                                                                         <apex:repeat value="{!rebaseSources}" var="rebaseOrg">
                                                                             <td style="text-align: center;">
-                                                                                <apex:inputCheckbox disabled="{!NOT(OR(usEnvironmentAvailabilityMap[rebaseOrg.step.copado__Source_Environment__c][us.userStory.Id].isAvailable,showHiddenCheckboxes))}" style="{!IF(NOT(OR(usEnvironmentAvailabilityMap[rebaseOrg.step.copado__Source_Environment__c][us.userStory.Id].isAvailable,showHiddenCheckboxes)),'filter: invert(75%);','')}" html-data-envId="{!rebaseOrg.step.copado__Source_Environment__c}" html-data-usId="{!us.userStory.Id}" value="{!usEnvironmentAvailabilityMap[rebaseOrg.step.copado__Source_Environment__c][us.userStory.Id].isSelected}"
-                                                                                html-data-defualt-disabled="{!NOT(usEnvironmentAvailabilityMap[rebaseOrg.step.copado__Source_Environment__c][us.userStory.Id].isAvailable)}" />
+                                                                                <apex:inputCheckbox disabled="{!NOT(OR(usEnvironmentAvailabilityMap[us.userStory.Id][rebaseOrg.step.copado__Source_Environment__c].isAvailable,showHiddenCheckboxes))}" style="{!IF(NOT(OR(usEnvironmentAvailabilityMap[us.userStory.Id][rebaseOrg.step.copado__Source_Environment__c].isAvailable,showHiddenCheckboxes)),'filter: invert(75%);','')}" html-data-envId="{!rebaseOrg.step.copado__Source_Environment__c}" html-data-usId="{!us.userStory.Id}" value="{!usEnvironmentAvailabilityMap[us.userStory.Id][rebaseOrg.step.copado__Source_Environment__c].isSelected}"
+                                                                                                    html-data-defualt-disabled="{!NOT(usEnvironmentAvailabilityMap[us.userStory.Id][rebaseOrg.step.copado__Source_Environment__c].isAvailable)}" />
                                                                             </td>
                                                                         </apex:repeat>
                                                                     </tr>
                                                                 </apex:repeat>
                                                             </tbody>
                                                         </table>
-                                                    </div>    
-                                                        
+                                                    </div>
+
                                                     <apex:outputPanel rendered="{!rebaseUserStoriesWrapper.size == 0}">
                                                         <center>
                                                             <p><apex:outputText value="No user story to be selected" /></p> <!-- TODO: Relace hardcoded value with NO_US_TO_SELECT}" -->
@@ -852,8 +842,8 @@
                                     <apex:actionFunction action="{!createRebasePromotionsAndDeploy}" name="createRebasePromotionsAndDeploy" reRender="rebaseMessage,rebaseMainRender,rebaseEnvironments,rebasePromotionsPanel,createdPromotionButtons" oncomplete="unlock();overridePageMessages();"/>
                                     <apex:outputPanel id="rebasePromotionButtons" layout="block" >
                                         <apex:outputText value="WARNING: Auto selection is disabled. Any action you take on this dialog is strictly at your own risk." style="text-align: left;color:orange;" rendered="{!showHiddenCheckboxes}"/> <!-- TODO: replace hardcoded value with MASS_BP_DISABLE_AUTOSELECT_WARNING} -->
-                                        
-                                        <apex:outputPanel rendered="{!rebaseUserStoriesWrapper.size > 0}" layout="none" id="rebaseButtons">
+
+                                        <apex:outputPanel rendered="{!AND(rebaseUserStoriesWrapper.size > 0, OR(AND(NOT(ISNULL(rebaseProject)), rebaseProject != '--None--'),AND(NOT(ISNULL(rebaseRelease)), rebaseRelease != '--None--')))}" layout="none" id="rebaseButtons">
                                             <apex:commandLink action="{!goToPromotions}" rendered="{!rebasePromotionKeySize > 0}" target="_blank" value="Go to promotions" onclick="lock();" styleClass="slds-button slds-button_neutral slds-path__mark-complete slds-m-horizontal_small" oncomplete="unlock();" reRender="rebaseMainRender"/> 
 
                                             <apex:commandLink target="_blank" value="{!$Label.copado__create} {!promotionBtnLabel}" onclick="lock();" styleClass="slds-button slds-button_brand slds-path__mark-complete slds-m-horizontal_small" id="createRebasePromotions" oncomplete="createRebasePromotions();" reRender="xx"/>                                            

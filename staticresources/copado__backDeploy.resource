@@ -1324,16 +1324,15 @@ backDeploy.calculateFileDifferences = function(jsonObject,conf){
                 if( backDeploy.uiData.type === "pull"){
                     var commitsBehindNumber = item["commitsBehind"];
                     var commitsBehindLabel = $copado('#commBehind');
-                    backDeploy.assignCBMTabLabels(commitsBehindLabel,commitsBehindNumber);
 
+                    backDeploy.assignCBMTabLabels(commitsBehindLabel,commitsBehindNumber);
                     $copado('[Id$=commitBehindNum]').val(commitsBehindNumber);
 
                     backDeploy.data.gridItems = item["filesMergedBehind"];
-                    fileDiffSize = backDeploy.data.gridItems.length;
                     var fileDiffLabel = $copado('#filediff');
-                    backDeploy.assignCBMTabLabels(fileDiffLabel,fileDiffSize);
-                    var elem = item["filesMergedConflictBehind"];
                     if(backDeploy.data.gridItems){
+                        fileDiffSize = backDeploy.data.gridItems.length;
+                        backDeploy.assignCBMTabLabels(fileDiffLabel,fileDiffSize);
                         if(conf.dataMode && conf.dataMode == 'mergeDiff'){
                             var t = backDeploy.data.gridItems;
                             backDeploy.data.gridItems = [];
@@ -1344,20 +1343,27 @@ backDeploy.calculateFileDifferences = function(jsonObject,conf){
                             var fileMergedDiffLabel = $copado('#mergeddiffsize');
                             backDeploy.assignCBMTabLabels(fileMergedDiffLabel,fileDiffElem.length);
                         }
+                    } else {
+                        backDeploy.assignCBMTabLabels(fileDiffLabel, 0);
                     }
-                    if(backDeploy.data.gridConflictedItems){
-                        for(var j = 0; j < elem.length;j++){
-                            backDeploy.data.gridConflictedItems.push({f:elem[j]})
+                    var autoResolvedLabel = $copado('#autoresolved');
+                    if(backDeploy.data.gridConflictedItems) {
+                        var elem = item["filesMergedConflictBehind"];
+                        if(elem){
+                            for(var j = 0; j < elem.length;j++){
+                                backDeploy.data.gridConflictedItems.push({f:elem[j]})
+                            }
                         }
                         autoResolveSize = backDeploy.data.gridConflictedItems.length;
-                        var autoResolvedLabel = $copado('#autoresolved');
                         backDeploy.assignCBMTabLabels(autoResolvedLabel,autoResolveSize);
+                    } else {
+                        backDeploy.assignCBMTabLabels(autoResolvedLabel, 0);
                     }
                 } else {
                     var commitsAheadNumber = item["commitsAhead"];
                     var commitsAheadLabel = $copado('#commAhead');
-                    backDeploy.assignCBMTabLabels(commitsAheadLabel,commitsAheadNumber);
 
+                    backDeploy.assignCBMTabLabels(commitsAheadLabel,commitsAheadNumber);
                     $copado('[Id$=commitAheadNum]').val(commitsAheadNumber);
 
                     backDeploy.data.gridItems = item["filesMergedAhead"];
@@ -1369,22 +1375,32 @@ backDeploy.calculateFileDifferences = function(jsonObject,conf){
                         if(conf.dataMode && conf.dataMode == 'mergeDiff'){
                             var t = backDeploy.data.gridItems;
                             backDeploy.data.gridItems = backDeploy.filterGridMetadata(t,'d','update');
-                            backDeploy.assignCBMTabLabels($copado('#mergeddiffsize'),backDeploy.data.gridItems.length);
+                            if(backDeploy.data.gridItems) {
+                                backDeploy.assignCBMTabLabels($copado('#mergeddiffsize'),backDeploy.data.gridItems.length);
+                            } else {
+                                backDeploy.assignCBMTabLabels($copado('#mergeddiffsize'), 0);
+                            }
                         } else if(!conf.dataMode){
                             var t = backDeploy.data.gridItems;
                             var fileDiffElem = backDeploy.filterGridMetadata(t,'d','update');
                             var fileMergedDiffLabel = $copado('#mergeddiffsize');
-                            backDeploy.assignCBMTabLabels(fileMergedDiffLabel,fileDiffElem.length);
+                            if(fileDiffElem){
+                                backDeploy.assignCBMTabLabels(fileMergedDiffLabel,fileDiffElem.length);
+                            } else {
+                                backDeploy.assignCBMTabLabels(fileMergedDiffLabel, 0);
+                            }
                         }
                     }
+                    var autoResolvedLabel = $copado('#autoresolved');
                     if(backDeploy.data.gridConflictedItems){
                         for(var k = 0; k < elem.length;k++){
                             backDeploy.data.gridConflictedItems.push({f:elem[k]})
                         }
                         autoResolveSize = backDeploy.data.gridConflictedItems.length;
-                        var autoResolvedLabel = $copado('#autoresolved');
                         console.log('autoresolvedsize : '+autoResolveSize);
                         backDeploy.assignCBMTabLabels(autoResolvedLabel,autoResolveSize);
+                    } else {
+                        backDeploy.assignCBMTabLabels(autoResolvedLabel, 0);
                     }
                 }
             }
